@@ -54,14 +54,14 @@ function genchecksumbystring(params, key, cb) {
   });
 }
 
-function verifychecksum(params, key) {
+function verifychecksum(params, key, checksumhash) {
   var data = paramsToString(params, false);
-  //TODO: after PG fix on thier side remove below two lines
-  if (params.CHECKSUMHASH) {
-    params.CHECKSUMHASH = params.CHECKSUMHASH.replace('\n', '');
-    params.CHECKSUMHASH = params.CHECKSUMHASH.replace('\r', '');
 
-    var temp = decodeURIComponent(params.CHECKSUMHASH);
+  //TODO: after PG fix on thier side remove below two lines
+  if (typeof checksumhash !== "undefined") {
+    checksumhash = checksumhash.replace('\n', '');
+    checksumhash = checksumhash.replace('\r', '');
+    var temp = decodeURIComponent(checksumhash);
     var checksum = crypt.decrypt(temp, key);
     var salt = checksum.substr(checksum.length - 4);
     var sha256 = checksum.substr(0, checksum.length - 4);
